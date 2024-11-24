@@ -28,6 +28,6 @@ Genotyping typically occurs by sequencing one or more of the following genes:
 2. 18S small subunit ribosomal gene
 3. HSP 70 (heat shock protein)
 
-During this module, we will perform _Cryptosporidium _species identification for various _Cryptosporidium _positive samples.
+During this module, we will perform _Cryptosporidium_ species identification for various _Cryptosporidium_ positive samples.
 Pooled amplicons of actin, hsp70, and ssu from these samples were sequenced on an Illumina NextSeq machine to generate ~1/2 million paired-end reads.
 We will assemble these reads for each amplicon and determine the phylogenetic affiliation of the isolate.
