@@ -245,7 +245,7 @@ Two repositories that I pull from frequently are [staphb](https://github.com/Sta
 
 Two commands that you will use are **`docker pull`** and **`docker run`**
 
-The command: **`docker pull staphb/ivar`**, will pull the latest image of iVar from the staphb repository registered on Docker Hub.
+The command: **`docker pull staphb/staphb`**, will pull the latest image of iVar from the staphb repository registered on Docker Hub.
 You can specify another version with tags: **`docker pull staphb/spades:3.12.0`**, pulls an image for spades (a de novo assembler) version 3.12.0
 <br>
 The **`docker run`** command will:
