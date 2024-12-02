@@ -301,7 +301,8 @@ Now pass the results of `esearch` to `efetch` to download the sequences.
  > If you look at the definition lines of the sequences or scroll through the file, you'll notice some pretty long sequences.  These are the contigs from various Cryptosporidium genome assemblies
  > that we had exclued previously.  We'll want to do the same here using our BOOLEAN search terms.
 
-  esearch -db nuccore -query "actin AND Cryptosporidium [ORGN] NOT genome" | efetch -format fasta > actin_contextual.fasta
+
+	esearch -db nuccore -query "actin AND Cryptosporidium [ORGN] NOT genome" | efetch -format fasta > actin_contextual.fasta
 
 Try using the same commands to download Cryptosporidium hsp70 sequences.
 
