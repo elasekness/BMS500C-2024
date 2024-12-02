@@ -138,6 +138,13 @@ Using our `sed` command, let's also add the gene name to the definition line. We
 
 <br>
 
+## Getting some basic read statistics
+
+You can generate a summmary of the quality of your data with [fastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), which provides nice graphics or we can use
+[SeqKit](https://bioinf.shenwei.me/seqkit/) for a more pared-down summary of our data.
+
+	seqkit stats [1-10]_R1.fastq.gz
+ 	seqkit stats [1-10]_R2.fastq.gz
 
 ## Adaptor removal and quality trimming
 
@@ -157,12 +164,13 @@ Remove adapters from your reads and keep only those reads passing quality metric
 * Judging from the TrimGalore output, does your sequencing run look good?
 * What is the percentage of reads that passed trimming?
 * You can also look at the quality with [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+* Have the summary statistics changed for your trimmed reads in comparison to the original fastq files?
 
 
 <br>
 
 
-## Mapping trimmed reads to the reference genome
+## Mapping trimmed reads to the reference
 
 We will map our trimmed reads to our actin, Hsp70, and ssu genes with [BWA](http://bio-bwa.sourceforge.net">http://bio-bwa.sourceforge.net) (Burrows-Wheeler Aligner), a short-read aligner tool. Most short-read aligners rely on breaking reads into K-mers (shorter sequences of a specified length), aligning these to the reference genome, and extending these seeds with some amount of base misincorporation. This is actually faster than aligning the entire read. BWA outputs the alignment information in a [SAM](https://samtools.github.io/hts-specs/SAMv1.pdf) format. The output from BWA will need to be saved in a file, converted to a binary format, and sorted by read position in the genome (or coordinate) for additional analyses, such as variant calling.  While we could do each step individually, we can also pipe these commands together for faster processing and to avoid generating intermediate files that we would later delete.
 
