@@ -217,58 +217,19 @@ Determine coverage and depth of coverage.
 
 <br>
 
-We will use [Bcftools](https://samtools.github.io/bcftools/).
+	samtools fastq -F 4  [1-10].sorted.bam -o [1-10].fastq
 
-	bctools mpileup -q 30 -d 100000 -f HQ596519.fasta wnv[A-Z].sorted.bam | bcftools call -m -v -V indels --ploidy 1 > wnv[A-Z].vcf
-
-> The `mpileup` function calculates genotype likelihoods and the `call` function uses this information to call variants. <br>
-> **`-q`** specifies the minimum mapping quality for an alignment to be considered <br>
-> **`-d`** specifies the maximum depth to read at each position <br>
-> **`-f`** indicates the reference genome <br>
-> **`-m`** = multi-allelic variant caller <br>
-> **`-v`** = output only variant positions (i.e. not those that match the reference nucleotide) <br>
-> **`-V`** = do not consider INDELs <br>
-> Notice that the output is in the tab delimited [VCF](https://samtools.github.io/hts-specs/VCFv4.2.pdf) format.
+> The -F 4 flag excludes reads that do not map to the reference database <br>
+> Here, we wrote both F and R reads to the same fastq file <br>
+> Notice that the samtools fastq help menu shows that we could write them to their own files. <br>
 
 <br>
 
-Take a look at your vcf file. The begining of the file is devoted to descriptions of the information contained therein; these lines being with a '#'.  After each line contains information on a position with a variant call, including the reference contig, the position, the reference and alternative nucleotides at this position, and the quality of the call (bigger is better). The 'Format' field contains additional information that you can use to assess whether the variant call is real or a false positive (for example, do to a poor assembly or a repetitive region). The four numbers after `DP4` indicate the number of high quality forward and reverse reads that support the reference nucleotide and the number of forward and reverse reads that support the alternative, respectively. 
+## Generate a de novo assembly with your extracted reads
 
-Do all variant calls appear to be high-quality or should some be excluded?  Would we want to include low-frequency variants in a consensus genome?
+We will use [Megahit](https://github.com/voutcn/megahit?tab=readme-ov-file) to perform a de novo assembly.
 
-<br>
-
-There are many different criteria you could use to filter a vcf file. And these criteria will likely change depending on the goals of the project and the organism or population of study.  Let's use another function of `bcftools` to filter our vcf files by minimum quality and depth criteria.
-
-	bcftools query -i 'QUAL>220 && DP>100' -f '%POS\t%REF\t%ALT\t%QUAL\n' wnv[A-G].vcf
-
- > **`-i`** specifies the filtering criteria.  We want a quality value greater than 220 and a depth value greater than 100 <br>
- > **`-f`** specifies the fields we want output to STDOUT.  In this case, we want to see the position, reference and alternative alleles, and the quality value, seperated by a tab `\t`.
-* How many variants are high-quality?
-* How many variants are in your vcf?
-* Are there still low frequency variants that you would exclude?
-* Can you create a command with grep, sed, and awk that would grab the F and R depths for REF and ALT and calculate the frequency of ALT? Don't peak but here is the [answer](https://github.com/elasekness/BMS500C/blob/main/Answers.md).
-
-<br>
-
-Now let's generate our consesus genome sequence. The first steps are two index our reference genome and compress and index our vcf file.
-
-	samtools faidx HQ596519.fasta
- 	bcftools convert -O z wnv[A-G].vcf -o wnv[A-G].vcf.gz
-  	bcftools index wnv[A-G].vcf.gz
-   	bcftools consensus -H A -i 'QUAL>220 && DP>100' -f HQ596519.fasta -p wnv[A-G]_ wnv[A-G].vcf.gz > wnv[A-G].fasta
-
-> The **`-O`** in the **`bcftools convert`** command specifies the format of the output, which is `z` for compressed vcf
-> The **`-H`** in the **`bcftools consensus`** command specifies that we want to apply the alternative **`A`** allele to our consensus genome. <br>
-> The **`-i`** selects sites which meet the filtering criteria specified (the same as in our query statement). <br>
-> The **`-p`** appends a prefix to the name of our consensus sequence (otherwise it will be named for the reference). <br>
-> Essentially, we are using the reference as a backbone for our consensus sequence and subsituting the alternative nucleotide at variant positions.  Unfortunately, with this strategy, positions with no coverage are assigned the reference nucleotide, which may or may not be correct.
-
-<br>
-
-Now try using [iVar](https://github.com/andersen-lab/ivar) -a tool designed for viral assemblies- to generate a consensus genome. But before we do, let's talk about Docker containers.
-
-<br>
+	megahit -r [1-10].fastq -o [1-10]_assembly
 
 
 ## Docker
@@ -309,39 +270,25 @@ See what docker images are already on your VM.
 
 	docker images
 
-> You should see that the staphb image for ivar (staphb/ivar:latest) is already on our VMs.
 
 <br>
 
 You can run your docker container interactively (from within the container).  Let's do this to understand how iVar works.
 
-	docker run --rm -it staphb/ivar
+	docker run --rm -it staphb/spades
 
-> You are now within the container, which has Linux, iVar, and all of iVar's dependencies installed.  Thus, we can use the same Bash commands that we've been using to navigate around the filesystem and bring up the iVar help menu by typing the `ivar` command. <br>
+> You are now within the container, which has Linux, spades, and all of spades dependencies installed.  Thus, we can use the same Bash commands that we've been using to navigate around the filesystem and bring up the spades help menu by typing the `spades.py` command. <br>
 > **`-it`** = i for interactive mode, and t for emulating a terminal inside the container
 > **`--rm`** removes the new container instead of storing it on your computer. <br>
 > To exit the container, type: **`ctr-d`**.
 
 <br>
 
-You might have noticed that the `ivar consensus` command actually takes the output piped from samtools. This means we must issue two docker run commands to the staphb/ivar image and specify piped output with the `-i` argument. If ivar were install on our VMs, the command would look like this:
-
-	samtools mpileup -aa -A -d 0 -Q 0 wnv[A-G].sorted.bam | ivar consensus -t 0.9 -m 100 -n N -p wnv[A-G]
-
-> `samtools mpileup` is providing the genotype likelihoods <br>
-> `ivar consensus` is creating the consensus sequence with the following parameters: <br>
-> `-t` = minimum frequency threshold to call a consensus (alt or ref must be supported by this mininum) <br>
-> `-m` = minimum depth to call a consensus <br>
-> `-n` = if depth is below minimum, position is ambiguous <br>
-> `-p` = prefix of fasta ouput file <br>
-
-<br>
-
 To run the dockerized version of this command, we need both `docker run` and `ivar` commands.
 
-	docker run --rm -v $(pwd):/data -w /data staphb/ivar ivar mpileup -aa -A -d 0 -Q 0 wnv[A-G].sorted.bam | docker run -i --rm -v $(pwd):/data -w /data staphb/ivar ivar consensus -t 0.9 -m 100 -n N -p wnv[A-G]
+	docker run --rm -v $(pwd):/data -w /data staphb/spades ivar mpileup -aa -A -d 0 -Q 0 wnv[A-G].sorted.bam | docker run -i --rm -v $(pwd):/data -w /data staphb/ivar ivar consensus -t 0.9 -m 100 -n N -p wnv[A-G]
 
-> Your consensus genome will be saved in the fasta file, wnv[A-G].fa 
+> Your consensus genome will be saved in the fasta file,.fa 
 
 <br>
 
@@ -359,8 +306,7 @@ Compare the consensus genomes created by bcftools and ivar. We will first concat
 
 Generate assembly summary statistics with [quast](https://github.com/ablab/quast)
 
-	docker run --rm -v $(pwd):/data -w /data staphb/quast quast.py -r HQ596519.fasta wnv[A-G].fasta wnv[A-G].fa
+	docker run --rm -v $(pwd):/data -w /data staphb/quast quast.py -r reference.fasta [1-10].fasta [1-10].fa
 
 > `Quast` generates an output directory with a bunch of results.  `cd` to `quast_results/latest` and look at the `reports.txt` file
-> The bcftools and iVar consensus genomes should look very similar except that iVar's contains ambiguous positions.
 * How many mismatches/100 kb are there between your two consensus genomes and the reference?
