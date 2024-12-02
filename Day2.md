@@ -1,6 +1,6 @@
 ## Tutorial 2
 
-**Objective:** To perform reference-based assemblies for actin, Hsp70, and ssu genes.
+**Objective:** To perform reference-based and de novo assemblies for actin, Hsp70, and ssu genes.
 
 Our NGS data contains sequences from both _Cryptosporidium_ and contamination (such as bacteria and fungi) as
 most of these samples were amplified from stool. You will map reads to your reference libraries to filter contaminants
