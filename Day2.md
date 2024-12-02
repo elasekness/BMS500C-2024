@@ -231,6 +231,9 @@ We will use [Megahit](https://github.com/voutcn/megahit?tab=readme-ov-file) to p
 
 	megahit -r [1-10].fastq -o [1-10]_assembly
 
+> The `-r` argument indicates that we have unpaired reads (as we put both R1 and R2 reads into the same fastq file).
+> The `-o` argument specifies a directory where the results will be written.
+* How many contigs did you generate?
 
 ## Docker
 
@@ -284,25 +287,14 @@ You can run your docker container interactively (from within the container).  Le
 
 <br>
 
-To run the dockerized version of this command, we need both `docker run` and `ivar` commands.
+To run the dockerized version of this command, we need both `docker run` and `spades` commands.
 
-	docker run --rm -v $(pwd):/data -w /data staphb/spades ivar mpileup -aa -A -d 0 -Q 0 wnv[A-G].sorted.bam | docker run -i --rm -v $(pwd):/data -w /data staphb/ivar ivar consensus -t 0.9 -m 100 -n N -p wnv[A-G]
+	docker run --rm -v $(pwd):/data -w /data staphb/spades spades.py -s [1-10].fastq -o spades_assembly
 
-> Your consensus genome will be saved in the fasta file,.fa 
+> `-s` specifies our single-end reads.
+* How many contigs did spades generate?
 
 <br>
-
-Compare the consensus genomes created by bcftools and ivar. We will first concatenate our two fasta files into a single file, align the genomes in both with [mafft](https://mafft.cbrc.jp/alignment/software/), and count the number of SNPs with [snp-dists](https://github.com/tseemann/snp-dists).
-
-	cat wnv[A-G].fasta wnv[A-G].fa > both_genomes.fasta
- 	mafft both_genomes.fasta > both_genomes.aln.fasta
-  	snp-dists both_genomes.aln.fasta
-
-> Our consensus genomes should be the same length so they should already be aligned but we'll align anyway for good practice. <br>
-> By default **`snp-dists`** does not count ambiguous positions. <br>
-* Were there any differences between these two genomes?
-* Now include ambiguous positions in the tally.
-* Did bcftools assign a reference call to a position that was considered ambiguous by iVar?
 
 Generate assembly summary statistics with [quast](https://github.com/ablab/quast)
 
