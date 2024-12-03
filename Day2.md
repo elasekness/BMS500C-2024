@@ -120,21 +120,23 @@ Copy the fastq files for your sample from the `BMS500C-2024` directory to your `
 	cp ../BMS500C-2024/fastq/1_R*fastq.gz fastq/
 
 > Replace `1` with the letter of your sample. <br>
-> Notice that fastq files have either an _1 or _2 in their names, representing the forward and reverse direction of the sequencing.
+> Notice that fastq files have either an _R1 or _R2 in their names, representing the forward and reverse direction of the sequencing.
 
 <br>
 
 ## Create database by concatenating our individual gene fasta files
 
-We have separate fasta files for actin, Hsp70, and ssu.  We can concatenated these together to create a single database.
-Using our `sed` command, let's also add the gene name to the definition line. We will discuss the `sed` syntax in class.
+We have separate fasta files for actin, Hsp70, and ssu.  We can concatenate these together to create a single database.
+Using our `sed` command, let's also add the gene name to the definition line. We will discuss the `sed` syntax in class.<br>
+Assuming you're in your home directory:
 
-	sed 's/\(>.*\)/\1_actin/' actin.fasta > reference.fasta
- 	sed 's/\(>.*\)/\1_hps70/' hsp70.fasta >> reference.fasta
-  	sed 's/\(>.*\)/\1_ssu/' ssu.fasta > reference.fasta
+	sed 's/\(>.*\)/\1_actin/' actin/actin.fasta > fastq/reference.fasta
+ 	sed 's/\(>.*\)/\1_hps70/' hsp70/hsp70.fasta >> fastq/reference.fasta
+  	sed 's/\(>.*\)/\1_ssu/' ssu/ssu.fasta > fastq/reference.fasta
 
 > Notice that the `\( and `\) have special meaning.
 > Also notice that we are appending data to our reference.fasta file instead of overwriting that information with `.>>`.
+> We specified the relative path to our fasta files and wrote the output of the sed commands to reference.fasta, which is located in the fastq directory.
 
 <br>
 
@@ -143,6 +145,7 @@ Using our `sed` command, let's also add the gene name to the definition line. We
 You can generate a summmary of the quality of your data with [fastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), which provides nice graphics or we can use
 [SeqKit](https://bioinf.shenwei.me/seqkit/) for a more pared-down summary of our data.
 
+	cd fastq/
 	seqkit stats [1-10]_R1.fastq.gz
  	seqkit stats [1-10]_R2.fastq.gz
 
@@ -188,9 +191,12 @@ Align your reads to the reference genome with BWA, pipe the output to samtools t
 
 	bwa reference.fasta [1-10]_val_1.fq.gz [1-10]_val_2.fq.gz | samtools sort -o [1-10].sorted.bam
 
+> We pipe the output of bwa to [samtools](http://www.htslib.org/) to sort the output by read coordinates and convert the sam file to a binary format (bam) <br>
+> Although not really necessary to do so here, most other downstream analyses (such as variant detection) require a coordinate-sorted bam file so it's good practice.
+
 <br>
 
-You can view the alignment file with `samtools`.  The [SAM](https://samtools.github.io/hts-specs/SAMv1.pdf) file is yet another tab delimited file where each line contains information on the read or its mate, mapping location, mapping quality, etc.
+You can also view the alignment file with `samtools`.  The [SAM](https://samtools.github.io/hts-specs/SAMv1.pdf) file is yet another tab delimited file where each line contains information on the read or its mate, mapping location, mapping quality, etc.
 
 	samtools view [1-10].sorted.bam | more
 
@@ -206,8 +212,8 @@ Now generate some summary statistics for your alignment file.
  	samtools idxstat [1-10].sorted.bam
 
 > This command provides some useful information on the number of reads that mapped or didn't map to your reference
-> genome, how many R1 and R2 reads mapped, and how many mates are properly paired with each other
-> idxstat shows how many reads aligned to each refernce gene
+> genome, how many R1 and R2 reads mapped, and how many mates are properly paired with each other. <br>
+> idxstat shows how many reads aligned to each refernce gene.
 * Can you get a sense of what the identity of your sample might be from the idxstats information?
 
 <br>
@@ -301,12 +307,3 @@ To run the dockerized version of this command, we need both `docker run` and `sp
 
 > `-s` specifies our single-end reads.
 * How many contigs did spades generate?
-
-<br>
-
-Generate assembly summary statistics with [quast](https://github.com/ablab/quast)
-
-	docker run --rm -v $(pwd):/data -w /data staphb/quast quast.py -r reference.fasta [1-10].fasta [1-10].fa
-
-> `Quast` generates an output directory with a bunch of results.  `cd` to `quast_results/latest` and look at the `reports.txt` file
-* How many mismatches/100 kb are there between your two consensus genomes and the reference?
