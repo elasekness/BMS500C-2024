@@ -134,9 +134,9 @@ Assuming you're in your home directory:
  	sed 's/\(>.*\)/\1_hps70/' hsp70/hsp70.fasta >> fastq/reference.fasta
   	sed 's/\(>.*\)/\1_ssu/' ssu/ssu.fasta > fastq/reference.fasta
 
-> Notice that the `\( and `\) have special meaning. <br>
+> Notice that the `\(` and `\)` have special meaning. <br>
 > Also notice that we are appending data to our reference.fasta file instead of overwriting that information with `.>>`. <br>
-> We specified the relative path to our fasta files and wrote the output of the sed commands to reference.fasta, which is located in the fastq directory.
+> We specified the relative path to our fasta files and wrote the output of the sed commands to reference.fasta, which is located in the `fastq` directory.
 
 <br>
 
@@ -166,7 +166,6 @@ Remove adapters from your reads and keep only those reads passing quality metric
 
 * Judging from the TrimGalore output, does your sequencing run look good?
 * What is the percentage of reads that passed trimming?
-* You can also look at the quality with [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 * Have the summary statistics changed for your trimmed reads in comparison to the original fastq files?
 
 
@@ -187,7 +186,7 @@ Create an index of your reference genome.
 
 <br>
 
-Align your reads to the reference genome with BWA, pipe the output to samtools to sort the reads by their coordinates and to convert to a binary format. Note that we could also use compressed fastq files.
+Align your reads to the reference database with BWA, pipe the output to samtools to sort the reads by their coordinates and to convert to a binary format.
 
 	bwa reference.fasta [1-10]_val_1.fq.gz [1-10]_val_2.fq.gz | samtools sort -o [1-10].sorted.bam
 
@@ -200,7 +199,7 @@ You can also view the alignment file with `samtools`.  The [SAM](https://samtool
 
 	samtools view [1-10].sorted.bam | more
 
-> We pipe the output of the `samtools` command to `more` for easier viewing.
+> We pipe the output of the `samtools` command to `more` for easier viewing. <br>
 > This is a good time to practice using `cut`, `sort`, and `uniq` commands for getting a quick sense of your data.
 * Can you get a sense of the average mapping quality of your reads? **Hint**: mapping quality is contained in the 5th field.
 
@@ -211,9 +210,8 @@ Now generate some summary statistics for your alignment file.
 	samtools flagstat [1-10].sorted.bam
  	samtools idxstat [1-10].sorted.bam
 
-> This command provides some useful information on the number of reads that mapped or didn't map to your reference
-> genome, how many R1 and R2 reads mapped, and how many mates are properly paired with each other. <br>
-> idxstat shows how many reads aligned to each refernce gene. <br>
+> This command provides some useful information on the number of reads that mapped or didn't map to your reference, how many R1 and R2 reads mapped, and how many mates are properly paired with each other. <br>
+> idxstat shows how many reads aligned to each reference gene. <br>
 * Can you get a sense of what the identity of your sample might be from the idxstats information?
 
 <br>
@@ -233,7 +231,7 @@ Determine coverage and depth of coverage.
 
 	samtools fastq -F 4  [1-10].sorted.bam -o [1-10].fastq
 
-> The -F 4 flag excludes reads that do not map to the reference database <br>
+> The `-F 4` flag excludes reads that do not map to the reference database <br>
 > Here, we wrote both F and R reads to the same fastq file <br>
 > Notice that the samtools fastq help menu shows that we could write them to their own files. <br>
 
@@ -245,7 +243,7 @@ We will use [Megahit](https://github.com/voutcn/megahit?tab=readme-ov-file) to p
 
 	megahit -r [1-10].fastq -o assembly
 
-> The `-r` argument indicates that we have unpaired reads (as we put both R1 and R2 reads into the same fastq file).
+> The `-r` argument indicates that we have unpaired reads (as we put both R1 and R2 reads into the same fastq file). <br>
 > The `-o` argument specifies a directory where the results will be written.
 * How many contigs did you generate?
 
