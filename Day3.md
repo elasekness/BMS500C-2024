@@ -36,6 +36,7 @@ We will create a blast database using our reference.fasta file, which contains t
 > `-outfmt 6` returns the results in tab-delimited format. The information proceeding the 6 specifies the the fields to return. <br>
 > We are outputting the query accession, the subject accession, the percent identity between query and subject, the percent coverage of the query by the hit, the alignment legnth, the query length,
 the number of mismatches between query and subject, the number of gaps, and the start and end of the alignment in the query and subject, respectively.<br>
+
 Based on your BLAST results:
 *  are all genes represented in your contigs file?
 *  is the tophit from the same species if you have multiple genes present?
@@ -138,7 +139,7 @@ If we do not know the best-fitting substituion model to employ, we can have iqtr
 > FigTree will convert the newick text file into a graphical representation.
 * Generate trees for hsp70 and ssu.
 * Import your trees into FigTree (this will require me to transfer your files to the bucket for download to your computers).
-* Does the phylogenetic placement and branch lengths of your sequences support a species identification? Do the bootstrap values for this relationships lend confidence to your conclusion?
+* Does the phylogenetic placement and branch lengths of your sequences support a species identification? Do the bootstrap values for these relationships lend confidence to your conclusion?
 * Are your results consistent with those from blast?
 
 
