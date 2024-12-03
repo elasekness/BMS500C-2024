@@ -31,9 +31,9 @@ We will create a blast database using our reference.fasta file, which contains t
 
 	blastn -query final.contigs.fa -db reference.fasta -max_target_seqs 5 -outfmt '6 qaccver saccver pident qcovs length qlen mismatch gapopen qstart qend sstart send' -out contigs.br
 
-> `blastn` searches are for nucleotide queries against a nucleotide database
-> `-max_target_seqs` specifies the maximum number of hits to return
-> `-outfmt 6` returns the results in tab-delimited format. The information proceeding the 6 specifies the the fields to return.
+> `blastn` searches are for nucleotide queries against a nucleotide database. <br>
+> `-max_target_seqs` specifies the maximum number of hits to return. <br>
+> `-outfmt 6` returns the results in tab-delimited format. The information proceeding the 6 specifies the the fields to return. <br>
 > We are outputting the query accession, the subject accession, the percent identity between query and subject, the percent coverage of the query by the hit, the alignment legnth, the query length,
 the number of mismatches between query and subject, the number of gaps, and the start and end of the alignment in the query and subject, respectively.
 * Based on your BLAST results:
@@ -44,9 +44,9 @@ the number of mismatches between query and subject, the number of gaps, and the 
 
 ## BLAST your contigs using the BLAST webpage and the nucleotide core (core_nt) database
 
-Navigate to the [blastn](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PROGRAM=blastn&PAGE_TYPE=BlastSearch&LINK_LOC=blasthome) webpage.
-Notice that nucleotide core is the default database.
-Copy and paste your contigs into the the Query sequence section and execute the blast search.  
+Navigate to the [blastn](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PROGRAM=blastn&PAGE_TYPE=BlastSearch&LINK_LOC=blasthome) webpage.<br>
+Notice that nucleotide core is the default database.<br>
+Copy and paste your contigs into the the Query sequence section and execute the blast search.<br> 
 You can print your contigs to STDOUT with the `cat` command.
 
 	cat final.contigs.fa
@@ -70,24 +70,24 @@ Make a directory for your alignments (assuming you are in your home directory).
 
 	mkdir alignments
 
-Copy the acin, hsp70, and ssu fasta files from BMS500-2024/alignments to your alignments directory (assuming you're in your home directory).
+Copy the actin, hsp70, and ssu fasta files from BMS500-2024/alignments to your alignments directory (assuming you're in your home directory).
 
 	cp ../BMS500-2024/alignments/*fasta alignments
 
  * What is the `*` doing here?
 
-Extract the contigs assigned as _Cryptosporidium_ actin, Hsp70, and ssu (based on your BLAST results) from your `contigs.final.fa` file and append them to their respective multi-fasta file in the `alignments` directory.
-We will use a small Python script that I wrote to extract each contig and append it to the proper fasta file.  The script requires a file with the name of the contig to extract and the fasta file, from which to extract it.
+Extract the contigs assigned as _Cryptosporidium_ actin, Hsp70, and ssu (based on your BLAST results) from your `contigs.final.fa` file and append them to their respective multi-fasta file in the `alignments` directory. <br>
+We will use a small Python script that I wrote to extract each contig and append it to the proper fasta file.  The script requires a file with the name of the contig to extract and the fasta file, from which to extract it.<br>
 An example of the workflow is provided below, assuming that the contig 'k119_0' was identified as a _Cryptosporidium_ actin gene.
 
 	cd assembly
 	echo 'k119_0' > seqlist.txt
  	gi_fastasampler.py seqlist.txt final.contigs.fa >> ../alignments/actin.fasta
 
-> `echo` simply returns the thing that we've echoed to STDOUT.  Here we are echoing the name of the 'k119_0' contig and writing it to a file called 'seqlist.txt'
-> `gi_fastasampler.py` is the Python script that will extract the fasta entry corresponding to the accession(s) in the seqlist.txt file.
->  Remember that `>>` adds/appends information to a file instead of overwriting it.
-* Perform the same set of operations for your assembled actin, Hsp70, and ssu sequences (if you have them).
+> `echo` simply returns the thing that we've echoed to STDOUT.  Here we are echoing the name of the 'k119_0' contig and writing it to a file called 'seqlist.txt'<br>
+> `gi_fastasampler.py` is the Python script that will extract the fasta entry corresponding to the accession(s) in the seqlist.txt file.<br>
+>  Remember that `>>` adds/appends information to a file instead of overwriting it.<br>
+* Perform the same set of operations for your assembled Hsp70, and ssu contigs (if you have them).
 
 Align the sequences in each fasta file with [mafft](https://mafft.cbrc.jp/alignment/software/).
 
@@ -96,7 +96,7 @@ Align the sequences in each fasta file with [mafft](https://mafft.cbrc.jp/alignm
   	mafft hsp70.fasta > hsp70.aln.fasta
    	mafft ssu.fasta > ssu.aln.fasta
 
-> The tilde (~) is a shorthand way of representing your home directory.  It stands for /home/your_account.  Previously, we specified a path relative to where we were.  Here, we are specifying the absolute path to `alignments`
+> The tilde (~) is a shorthand way of representing your home directory.  It stands for `/home/your_account`.  Previously, we specified a path relative to where we were.  Here, we are specifying the absolute path to `alignments`
 > Instead of issuing three separate `mafft` commands, we could be more efficient by using a BASH for-loop.
 > 
 
