@@ -35,8 +35,8 @@ We will create a blast database using our reference.fasta file, which contains t
 > `-max_target_seqs` specifies the maximum number of hits to return. <br>
 > `-outfmt 6` returns the results in tab-delimited format. The information proceeding the 6 specifies the the fields to return. <br>
 > We are outputting the query accession, the subject accession, the percent identity between query and subject, the percent coverage of the query by the hit, the alignment legnth, the query length,
-the number of mismatches between query and subject, the number of gaps, and the start and end of the alignment in the query and subject, respectively.
-* Based on your BLAST results:
+the number of mismatches between query and subject, the number of gaps, and the start and end of the alignment in the query and subject, respectively.<br>
+Based on your BLAST results:
 *  are all genes represented in your contigs file?
 *  is the tophit from the same species if you have multiple genes present?
 *  can you confidently assign a species to your sample given the PID, qcov, qlen, etc?
@@ -51,7 +51,7 @@ You can print your contigs to STDOUT with the `cat` command.
 
 	cat final.contigs.fa
 
-* Based on your BLAST results:
+Based on your BLAST results:
 *  are all of your contigs from _Cryptosporidium_?
 *  do these results agree with your command-line blast results?
 
@@ -61,10 +61,10 @@ Let's see whether the phylogenetic placement of our sequences agrees with the re
 
 <br>
 
-## Align your assembled gene sequences with curated _Cryptosporidum_ actin, Hsp70, and ssu genes.
+## Align your contigs with curated _Cryptosporidum_ actin, Hsp70, and ssu genes.
 
 For alignment purposes, we will copy pre-constructed actin, Hsp70, and ssu datasets from the BMS500-2024 directory to your home directories.
-This selection of Cryptosporidium sequences was filtered for length and mis-identified sequences (typed as the incorrect species) were removed.
+This selection of _Cryptosporidium_ sequences was filtered for length and mis-identified sequences (typed as the incorrect species) were removed.
 
 Make a directory for your alignments (assuming you are in your home directory).
 
