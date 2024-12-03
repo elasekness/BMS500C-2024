@@ -87,7 +87,7 @@ An example of the workflow is provided below, assuming that the contig 'k119_0' 
 > `echo` simply returns the thing that we've echoed to STDOUT.  Here we are echoing the name of the 'k119_0' contig and writing it to a file called 'seqlist.txt'<br>
 > `gi_fastasampler.py` is the Python script that will extract the fasta entry corresponding to the accession(s) in the seqlist.txt file.<br>
 >  Remember that `>>` adds/appends information to a file instead of overwriting it.<br>
-* Perform the same set of operations for your assembled Hsp70, and ssu contigs (if you have them).
+* Perform the same set of operations for your assembled Hsp70 and ssu contigs (if you have them).
 
 Align the sequences in each fasta file with [mafft](https://mafft.cbrc.jp/alignment/software/).
 
@@ -98,7 +98,47 @@ Align the sequences in each fasta file with [mafft](https://mafft.cbrc.jp/alignm
 
 > The tilde (~) is a shorthand way of representing your home directory.  It stands for `/home/your_account`.  Previously, we specified a path relative to where we were.  Here, we are specifying the absolute path to `alignments`
 > Instead of issuing three separate `mafft` commands, we could be more efficient by using a BASH for-loop.
-> 
 
-   
- 
+## Bash for loops
+
+
+Bash for loops are basically little shell scripts that can be excecuted from the command line (Bash is the command-line language we are using). Like all loops, they allow you to automate iterative processes. For example, instead of opening 200 hundred fasta files and manually changing the definition lines in each, I can run a for loop that will open each fasta file and make the changes that I specify.
+
+<br>
+
+The basic syntax is:
+
+	for FILE in *common_file_ending; do command $FILE; done
+
+> The interpretation of this code is: <br>
+> For every file that ends in some common ending (such as .txt or .gz), perform (do) some command on that file until there are no more files on which to operate, whereby “done” will exit us from the loop. <br>
+> The $ in front of FILE indicates that $FILE is a variable, a placeholder which is referring to each file that enters the loop, just as x is a variable that represents 2 in the equation x = 2. <br>
+> The `for`, `in`, `do`, and `done` are required parts of the for-loop syntax.
+
+<br>
+
+Use a 'for loop' to count the number of sequences in each alignment file:
+
+	for FILE in *aln.fasta; do grep -c ">" $FILE; done
+
+
+## Generate ML trees from your actin, Hsp70 and ssu alignments
+
+We are technically generating geneologies and assuming they will be equivalent to a species phylogeny.  However, there are several reasons a gene tree may not recapitulate a species tree, including introgression, gene duplication (paralogy), and incomplete lineage sorting.
+
+The basic command for running iqtree requires an alignment file and the specification of a [substitution model](http://www.iqtree.org/doc/Substitution-Models).<br>
+If we do not know the best-fitting substituion model to employ, we can have iqtree determine it with ModelFinder.
+
+	iqtree -s actin.aln.fasta -bb 1000
+
+> Specifying only the alignment file will run ModelFinder first, select the best-fitting model, and then use it for phylogenetic reconstruction. <br>
+> Provide a model with the `-m` argument. <br>
+> `bb` indicates the number of [ultrafast bootstrap](http://www.iqtree.org/doc/Tutorial#assessing-branch-supports-with-ultrafast-bootstrap-approximation) replicates to perform. Bootstrapping resamples the data with replacement to determine how many times the relationships observed in the ML tree are recovered, which is a measure of support. <br>
+> There are several files produced from an iqtree analysis.  The phylogeny is represented in Newick format (parenthetical notation) and has the '.treefile' ending. <br>
+> FigTree will convert the newick text file into a graphical representation.
+* Generate trees for hsp70 and ssu.
+* Import your trees into FigTree (this will require me to transfer your files to the bucket for download to your computers).
+* Does the phylogenetic placement and branch lengths of your sequences support a species identification? Do the bootstrap values for this relationships lend confidence to your conclusion?
+* Are your results consistent with those from blast?
+
+
