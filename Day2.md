@@ -134,8 +134,8 @@ Assuming you're in your home directory:
  	sed 's/\(>.*\)/\1_hps70/' hsp70/hsp70.fasta >> fastq/reference.fasta
   	sed 's/\(>.*\)/\1_ssu/' ssu/ssu.fasta > fastq/reference.fasta
 
-> Notice that the `\( and `\) have special meaning.
-> Also notice that we are appending data to our reference.fasta file instead of overwriting that information with `.>>`.
+> Notice that the `\( and `\) have special meaning. <br>
+> Also notice that we are appending data to our reference.fasta file instead of overwriting that information with `.>>`. <br>
 > We specified the relative path to our fasta files and wrote the output of the sed commands to reference.fasta, which is located in the fastq directory.
 
 <br>
@@ -213,7 +213,7 @@ Now generate some summary statistics for your alignment file.
 
 > This command provides some useful information on the number of reads that mapped or didn't map to your reference
 > genome, how many R1 and R2 reads mapped, and how many mates are properly paired with each other. <br>
-> idxstat shows how many reads aligned to each refernce gene.
+> idxstat shows how many reads aligned to each refernce gene. <br>
 * Can you get a sense of what the identity of your sample might be from the idxstats information?
 
 <br>
@@ -243,7 +243,7 @@ Determine coverage and depth of coverage.
 
 We will use [Megahit](https://github.com/voutcn/megahit?tab=readme-ov-file) to perform a de novo assembly.
 
-	megahit -r [1-10].fastq -o [1-10]_assembly
+	megahit -r [1-10].fastq -o assembly
 
 > The `-r` argument indicates that we have unpaired reads (as we put both R1 and R2 reads into the same fastq file).
 > The `-o` argument specifies a directory where the results will be written.
