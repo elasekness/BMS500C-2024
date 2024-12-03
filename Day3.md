@@ -18,3 +18,39 @@ with our actin, Hsp70, and ssu datasets.  The results will help us to phylogenet
 
 <br>
 
+First let's use the command-line BLAST functions to determine the best matches between our assembled genes and those of the reference database.
+We will create a blast database using our reference.fasta file, which contains the _Cryptosporidium_ sequences we downloaded from NCBI.
+
+## Make a blast database
+
+	makeblastdb -in reference.fasta -dbtype nucl
+
+## BLAST your contigs against the reference database
+
+	blastn -query final.contigs.fa -db reference.fasta -max_target_seqs 5 -outfmt '6 qaccver saccver pident qcovs length qlen mismatch gapopen qstart qend sstart send' -out contigs.br
+
+> `blastn` searches are for nucleotide queries against a nucleotide database
+> `-max_target_seqs` specifies the maximum number of hits to return
+> `-outfmt 6` returns the results in tab-delimited format. The information proceeding the 6 specifies the the fields to return.
+> We are outputting the query accession, the subject accession, the percent identity between query and subject, the percent coverage of the query by the hit, the alignment legnth, the query length,
+the number of mismatches between query and subject, the number of gaps, and the start and end of the alignment in the query and subject, respectively.
+* Based on your BLAST results:
+*  - are all genes represented in your contigs file?
+*  - is the tophit from the same species if you have multiple genes present?
+*  - can you confidently assign a species to your sample given the PID, qcov, qlen, etc?
+
+
+## BLAST your contigs using the BLAST webpage and the nucleotide core (core_nt) database
+
+Navigate to the [blastn](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PROGRAM=blastn&PAGE_TYPE=BlastSearch&LINK_LOC=blasthome) webpage.
+Notice that nucleotide core is the default database.
+Copy and paste your contigs into the the Query sequence section and execute the blast search.  
+You can print your contigs to STDOUT with the `cat` command.
+
+	cat final.contigs.fa
+
+* Based on your BLAST results:
+*  - are all of your contigs from _Cryptosporidium_?
+*  - do these results agree with your command-line blast results?
+ 
+ 
