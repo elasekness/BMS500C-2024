@@ -25,11 +25,12 @@ We will create a blast database using our reference.fasta file, which contains t
 
 ## Make a blast database
 
+	cd fastq/
 	makeblastdb -in reference.fasta -dbtype nucl
 
 ## BLAST your contigs against the reference database
 
-	blastn -query final.contigs.fa -db reference.fasta -max_target_seqs 5 -outfmt '6 qaccver saccver pident qcovs length qlen mismatch gapopen qstart qend sstart send' -out contigs.br
+	blastn -query assembly/final.contigs.fa -db reference.fasta -max_target_seqs 5 -outfmt '6 qaccver saccver pident qcovs length qlen mismatch gapopen qstart qend sstart send' -out contigs.br
 
 > `blastn` searches are for nucleotide queries against a nucleotide database. <br>
 > `-max_target_seqs` specifies the maximum number of hits to return. <br>
@@ -50,6 +51,7 @@ Notice that nucleotide core is the default database.<br>
 Copy and paste your contigs into the the Query sequence section and execute the blast search.<br> 
 You can print your contigs to STDOUT with the `cat` command.
 
+	cd assembly/
 	cat final.contigs.fa
 
 Based on your BLAST results:
@@ -81,13 +83,14 @@ Extract the contigs assigned as _Cryptosporidium_ actin, Hsp70, and ssu (based o
 We will use a small Python script that I wrote to extract each contig and append it to the proper fasta file.  The script requires a file with the name of the contig to extract and the fasta file, from which to extract it.<br>
 An example of the workflow is provided below, assuming that the contig 'k119_0' was identified as a _Cryptosporidium_ actin gene.
 
-	cd assembly
+	cd fastq/assembly
 	echo 'k119_0' > seqlist.txt
- 	gi_fastasampler.py seqlist.txt final.contigs.fa >> ../alignments/actin.fasta
+ 	gi_fastasampler.py seqlist.txt final.contigs.fa >> ~/alignments/actin.fasta
 
 > `echo` simply returns the thing that we've echoed to STDOUT.  Here we are echoing the name of the 'k119_0' contig and writing it to a file called 'seqlist.txt'<br>
 > `gi_fastasampler.py` is the Python script that will extract the fasta entry corresponding to the accession(s) in the seqlist.txt file.<br>
 >  Remember that `>>` adds/appends information to a file instead of overwriting it.<br>
+> The tilde (~) is a shorthand way of representing your home directory.  It stands for `/home/your_account`.  Previously, we specified a path relative to where we were.  Here, we are specifying the absolute path to `alignments`
 * Perform the same set of operations for your assembled Hsp70 and ssu contigs (if you have them).
 
 Align the sequences in each fasta file with [mafft](https://mafft.cbrc.jp/alignment/software/).
@@ -97,7 +100,7 @@ Align the sequences in each fasta file with [mafft](https://mafft.cbrc.jp/alignm
   	mafft hsp70.fasta > hsp70.aln.fasta
    	mafft ssu.fasta > ssu.aln.fasta
 
-> The tilde (~) is a shorthand way of representing your home directory.  It stands for `/home/your_account`.  Previously, we specified a path relative to where we were.  Here, we are specifying the absolute path to `alignments`
+
 > Instead of issuing three separate `mafft` commands, we could be more efficient by using a BASH for-loop.
 
 ## Bash for loops
