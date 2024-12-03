@@ -16,7 +16,7 @@ In ML methods, we determine the probablity of the data (the alignment) given the
 The best tree is considered the tree that maximizes the likelihood of the data.  We will use [IQ-Tree](http://www.iqtree.org/) to infer phylogenies
 with our actin, Hsp70, and ssu datasets.  The results will help us to phylogenetically place our unkown _Cryptosporidium_ species.
 
-You will also need to install multi-sequence alignment ([SeaView](https://doua.prabi.fr/software/seaview) and tree-viewing [FigTree](https://github.com/rambaut/figtree/releases) software on your personal computer.
+You will also need to install multi-sequence alignment [SeaView](https://doua.prabi.fr/software/seaview) and tree-viewing [FigTree](https://github.com/rambaut/figtree/releases) software on your personal computer.
 
 <br>
 
@@ -102,6 +102,7 @@ Align the sequences in each fasta file with [mafft](https://mafft.cbrc.jp/alignm
 
 
 > Instead of issuing three separate `mafft` commands, we could be more efficient by using a BASH for-loop.
+* View an example alignment in SeaView.
 
 ## Bash for loops
 
