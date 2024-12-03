@@ -102,7 +102,7 @@ Align the sequences in each fasta file with [mafft](https://mafft.cbrc.jp/alignm
 
 
 > Instead of issuing three separate `mafft` commands, we could be more efficient by using a BASH for-loop.
-* View an example alignment in SeaView.
+* View an [example alignment](https://github.com/elasekness/BMS500C-2024/tree/main/example_alignments) in SeaView.
 
 ## Bash for loops
 
