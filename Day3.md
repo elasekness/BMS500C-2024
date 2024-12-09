@@ -75,7 +75,7 @@ Make a directory for your alignments (assuming you are in your home directory).
 
 Copy the actin, hsp70, and ssu fasta files from BMS500-2024/alignments to your alignments directory (assuming you're in your home directory).
 
-	cp ../BMS500-2024/alignments/*fasta alignments .
+	cp ../BMS500-2024/alignments/*fasta alignments
 
  * What is the `*` doing here?
 
