@@ -188,7 +188,7 @@ Create an index of your reference genome.
 
 Align your reads to the reference database with BWA, pipe the output to samtools to sort the reads by their coordinates and to convert to a binary format.
 
-	bwa reference.fasta [1-10]_val_1.fq.gz [1-10]_val_2.fq.gz | samtools sort -o [1-10].sorted.bam
+	bwa mem reference.fasta [1-10]_val_1.fq.gz [1-10]_val_2.fq.gz | samtools sort -o [1-10].sorted.bam
 
 > We pipe the output of bwa to [samtools](http://www.htslib.org/) to sort the output by read coordinates and convert the sam file to a binary format (bam) <br>
 > Although not really necessary to do so here, most other downstream analyses (such as variant detection) require a coordinate-sorted bam file so it's good practice.
