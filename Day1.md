@@ -77,7 +77,7 @@ Change (move) to a different directory.
 	cd fastq
 
 > **`cd`** = change directory. Use **`../`** or **`..`** to move up one directory (back to your home directory). What does **`cd`** alone do? <br>
-> You can think of changing directories as physically moving from on directory to another, which means your point of reference has changed. This will become more evident in the upcoming examples. <br>
+> You can think of changing directories as physically moving from one directory to another, which means your point of reference has changed. This will become more evident in the upcoming examples. <br>
 > For now, try listing the contents of the directory above yours from your home directory. Then **`cd`** to the directory above yours and list the contents of your home directory.
 
 <br>
@@ -88,7 +88,7 @@ Change (move) to a different directory.
 
 Directories and files have specific permissions associated with them or things that you are allowed to do to them.
 There are three permissions: 1) the ability to read (r) 2) the ability to write (w) and 3) the ability to execute (a script or program; x).
-There three sets of permissions representing 1) the User (you), 2) the group (multiple users),
+There are three sets of permissions representing 1) the User (you), 2) the group (multiple users),
 and 3) Others (Everyone else in the world).
 
 <br>
