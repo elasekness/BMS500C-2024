@@ -140,10 +140,19 @@ If we do not know the best-fitting substituion model to employ, we can have iqtr
 > Provide a model with the `-m` argument. <br>
 > `bb` indicates the number of [ultrafast bootstrap](http://www.iqtree.org/doc/Tutorial#assessing-branch-supports-with-ultrafast-bootstrap-approximation) replicates to perform. Bootstrapping resamples the data with replacement to determine how many times the relationships observed in the ML tree are recovered, which is a measure of support. <br>
 > There are several files produced from an iqtree analysis.  The phylogeny is represented in Newick format (parenthetical notation) and has the '.treefile' ending. <br>
-> FigTree will convert the newick text file into a graphical representation.
+> FigTree will convert the newick text file into a graphical representation (navigate to the file menu and select 'open' to import the tree file).
 * Generate trees for hsp70 and ssu.
 * Import your trees into FigTree (this will require me to transfer your files to the bucket for download to your computers).
-* Does the phylogenetic placement and branch lengths of your sequences support a species identification? Do the bootstrap values for these relationships lend confidence to your conclusion?
+* Does the phylogenetic placement of your sequences support a species identification? Do the bootstrap values for these relationships lend confidence to your conclusion?
+* You can view bootstrap values by selecting the 'node labels' option in the left menu and displaying the 'labels' option.
 * Are your results consistent with those from blast?
+
+We can also annotate our tree with additional information provided in a tab-delimited text file for each sample.  You can download the metadata file here: <br>
+Make sure to add an entry for your sequences and import the annotation by navigating to the file menu and selecting 'import annotations' to import the metadata file. <br>
+You can now change the information displayed for the tips by selecting the 'tip labels' option to the left and choosing a different annotation option.  
+Similarly, you can color the tree by these annotations.
+
+
+
 
 
